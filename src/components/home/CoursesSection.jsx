@@ -126,7 +126,7 @@ export default function CoursesSection() {
               </Link>
 
               <Link
-                to="/enquiry"
+                to="/contact"
                 className="group inline-flex min-h-[47px] items-center gap-2 rounded-full border border-[#D7DDD8] bg-white px-6 text-[14px] font-bold text-[#252B2D] transition-all hover:border-[#EF4444] hover:text-[#EF4444]"
               >
                 {t.enquire}

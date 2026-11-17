@@ -115,18 +115,7 @@ export default function ProgramsHero() {
             {content.description}
           </motion.p>
 
-          {/* SCROLL LINK */}
-          <motion.a
-            {...reveal(0.3)}
-            href="#programs-list"
-            className="group mt-6 inline-flex items-center gap-3 text-[13px] font-bold text-[#006B2E] transition-colors hover:text-[#EF4444]"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#CFE2D3] bg-white transition-colors group-hover:border-[#EF4444] group-hover:bg-[#EF4444] group-hover:text-white">
-              <ArrowDown size={17} />
-            </span>
-
-            {content.explore}
-          </motion.a>
+         
         </div>
 
         {/* RIGHT SIDE - MINIMAL SOCIAL IMPACT VISUAL */}

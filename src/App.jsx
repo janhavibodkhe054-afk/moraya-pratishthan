@@ -12,8 +12,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import College from "./pages/College";
 import Program from "./pages/Program";
-// import CSR from "./pages/CSR";
-// import UNExposure from "./pages/UNExposure";
+import CSR from "./pages/CSR";
+import UnExposure from "./pages/UnExposure";
 // import Team from "./pages/Team";
 import Success from "./pages/Success";
 import Gallery from "./pages/Gallery";
@@ -45,14 +45,16 @@ function App() {
           path="/success-stories"
           element={<Success />}
         />
+        <Route path="/csr" element={<CSR />} />
+        <Route path="/un-exposure" element={<UnExposure />} />
         {/*
         
         
 
         
         
-        <Route path="/csr" element={<CSR />} />
-        <Route path="/un-exposure" element={<UNExposure />} />
+        
+        
         <Route path="/team" element={<Team />} />
 
         

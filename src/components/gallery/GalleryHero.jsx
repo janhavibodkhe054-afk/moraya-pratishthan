@@ -12,9 +12,9 @@ import {
 import { useLanguage } from "../../context/Languagecontext";
 
 const photos = {
-  main: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1200&q=85",
-  top: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=600&q=85",
-  bottom: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=85",
+  main: "/logo.jpeg",
+  top: "40.webp",
+  bottom: "51.webp",
 };
 
 export default function GalleryHero() {

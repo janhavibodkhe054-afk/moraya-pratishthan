@@ -193,28 +193,7 @@ export default function RegistrationsRecognition() {
             </div>
           </motion.div>
 
-          {/* CTA */}
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-8"
-          >
-            <Link
-              to="/accreditations"
-              className="group inline-flex items-center gap-3 rounded-full bg-[#EF4444] px-6 py-3.5 text-[14px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#DC2626]"
-            >
-              <FileText size={18} />
-
-              {content.cta}
-
-              <ArrowUpRight
-                size={17}
-                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-              />
-            </Link>
-          </motion.div>
+          
         </div>
 
         {/* RIGHT SIDE - REGISTRATION LIST */}

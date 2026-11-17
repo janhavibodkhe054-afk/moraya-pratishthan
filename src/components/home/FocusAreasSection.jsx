@@ -1,26 +1,24 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  GraduationCap,
+  HeartPulse,
+  UsersRound,
+  Handshake,
+  Leaf,
+  ShieldCheck,
+  ArrowRight,
+} from "lucide-react";
 import { useLanguage } from "../../context/Languagecontext";
-
-const images = [
-  "https://images.unsplash.com/photo-1581093458791-9d42e3c1e6aa?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1000&q=85",
-];
 
 const content = {
   en: {
     eyebrow: "OUR KEY FOCUS AREAS",
     heading1: "Our Work.",
     heading2: "Our Commitment.",
-    subtitle:
-      "Integrated Initiatives for Sustainable Community Development.",
+    subtitle: "Integrated Initiatives for Sustainable Community Development.",
     button: "Explore Our Programs",
     areas: [
       {
@@ -55,7 +53,6 @@ const content = {
       },
     ],
   },
-
   mr: {
     eyebrow: "आमची प्रमुख कार्यक्षेत्रे",
     heading1: "आमचे कार्य.",
@@ -97,27 +94,21 @@ const content = {
   },
 };
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-};
+const icons = [
+  GraduationCap,
+  HeartPulse,
+  UsersRound,
+  Handshake,
+  Leaf,
+  ShieldCheck,
+];
 
 const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 35,
-  },
+  hidden: { opacity: 0, y: 22 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.65,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.5, ease: "easeOut" },
   },
 };
 
@@ -128,93 +119,123 @@ export default function FocusAreasSection() {
   return (
     <section
       id="focus-areas"
-      className="bg-[#FAFAF9] py-16 sm:py-20 lg:py-24"
+      className="relative overflow-hidden bg-[#FAFBF9] py-16 sm:py-20 lg:py-10"
     >
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
-
         {/* SECTION HEADING */}
+
+        {/* SECTION HEADING - CENTER ALIGNED */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mx-auto max-w-[850px] text-center"
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-11 max-w-[850px] text-center"
         >
           <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-[2px] w-8 bg-[#EF4444]" />
+            <span className="h-[2px] w-9 bg-[#EF6666]" />
 
-            <span className="text-[12px] font-bold uppercase tracking-[0.17em] text-[#68716D] sm:text-[13px]">
+            <span className="text-[11px] font-extrabold uppercase tracking-[0.17em] text-[#52705E]">
               {t.eyebrow}
             </span>
 
-            <span className="h-[2px] w-8 bg-[#EF4444]" />
+            <span className="h-[2px] w-9 bg-[#EF6666]" />
           </div>
 
-          <h2 className="text-[36px] font-black leading-[1.15] tracking-tight text-[#252B2D] sm:text-[46px] lg:text-[52px]">
-            {t.heading1}{" "}
-            <span className="text-[#EF4444]">
-              {t.heading2}
-            </span>
+          <h2 className="text-[35px] font-black leading-[1.15] tracking-tight text-[#17392E] sm:text-[46px] lg:text-[52px]">
+            {t.heading1} <span className="text-[#EF6666]">{t.heading2}</span>
           </h2>
 
-          <p className="mt-4 text-[16px] leading-[1.75] text-[#68716D] sm:text-[18px]">
+          <p className="mx-auto mt-4 max-w-[650px] text-[15px] leading-[1.8] text-[#68766D] sm:text-[17px]">
             {t.subtitle}
           </p>
         </motion.div>
 
-        {/* SIMPLE IMAGE CARDS */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="mt-11 grid gap-6 sm:grid-cols-2 lg:mt-13 lg:grid-cols-3"
-        >
-          {t.areas.map((area, index) => (
-            <motion.article
-              key={index}
-              variants={cardVariants}
-              whileHover={{ y: -7 }}
-              className="group overflow-hidden rounded-[12px] border border-[#EAECEA] bg-white shadow-[0_5px_22px_rgba(0,0,0,0.035)] transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(0,0,0,0.10)]"
-            >
-              {/* IMAGE */}
-              <div className="relative h-[230px] overflow-hidden bg-[#E9ECE9] sm:h-[240px] lg:h-[235px]">
-                <img
-                  src={images[index]}
-                  alt={area.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+        {/* MAIN LAYOUT */}
+        <div className="grid items-stretch gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:gap-10">
+          {/* LEFT - SIX FOCUS AREAS */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {t.areas.map((area, index) => {
+              const Icon = icons[index];
 
-                {/* BOTTOM ACCENT */}
-                <div className="absolute bottom-0 left-0 h-[3px] w-0 bg-[#EF4444] transition-all duration-500 group-hover:w-full" />
-              </div>
+              return (
+                <motion.div
+                  key={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  whileHover={{ y: -4 }}
+                  className="group relative rounded-[16px] border border-[#E3EBE4] bg-white p-5 transition-all duration-300 hover:border-[#C5DDCB] hover:shadow-[0_14px_35px_rgba(23,57,46,0.08)] sm:p-6"
+                >
+                  <div className="mb-5 flex items-center justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#EAF3EC] text-[#176A3A] transition-colors duration-300 group-hover:bg-[#17392E] group-hover:text-white">
+                      <Icon size={23} strokeWidth={1.8} />
+                    </div>
 
-              {/* CONTENT */}
-              <div className="flex min-h-[190px] flex-col items-center px-6 pb-7 pt-6 text-center sm:px-7">
-                <h3 className="text-[21px] font-extrabold leading-[1.35] text-[#252B2D] sm:text-[22px]">
-                  {area.title}
-                </h3>
+                    <span className="text-[12px] font-extrabold text-[#BCCBC0]">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
 
-                <p className="mt-3 text-[15px] leading-[1.75] text-[#69736E] sm:text-[16px]">
-                  {area.description}
-                </p>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+                  <h3 className="text-[17px] font-extrabold leading-[1.35] text-[#17392E] sm:text-[18px]">
+                    {area.title}
+                  </h3>
+
+                  <p className="mt-2 text-[13px] leading-[1.8] text-[#718076] sm:text-[14px]">
+                    {area.description}
+                  </p>
+
+                  <div className="mt-5 h-[2px] w-8 bg-[#EF6666] transition-all duration-300 group-hover:w-16" />
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* RIGHT - SINGLE IMAGE */}
+          <motion.div
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="relative min-h-[340px] overflow-hidden rounded-[20px] bg-[#17392E] lg:min-h-full"
+          >
+            <img
+              src="/48.webp"
+              alt="Community development initiatives"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B281C]/90 via-[#0B281C]/25 to-transparent" />
+
+            <div className="absolute bottom-0 left-0 right-0 p-7 sm:p-8">
+              <span className="mb-4 block h-[3px] w-12 bg-[#EF6666]" />
+
+              <h3 className="max-w-[320px] text-[26px] font-black leading-[1.25] text-white sm:text-[30px]">
+                {language === "mr"
+                  ? "समाजासाठी कार्य. परिवर्तनासाठी प्रयत्न."
+                  : "Working for People. Creating Change."}
+              </h3>
+
+              <p className="mt-3 text-[13px] leading-[1.8] text-white/80">
+                Morya Samajik Pratishthan
+              </p>
+            </div>
+          </motion.div>
+        </div>
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.55 }}
           className="mt-11 flex justify-center"
         >
           <Link
             to="/programs"
-            className="group inline-flex min-h-[52px] items-center gap-3 rounded-full bg-[#252B2D] px-8 text-[15px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#EF4444]"
+            className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-[#17392E] px-8 py-3 text-[14px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#EF6666] sm:text-[15px]"
           >
             {t.button}
 

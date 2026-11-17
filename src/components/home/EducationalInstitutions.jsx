@@ -103,47 +103,42 @@ export default function EducationalInstitutions() {
     >
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
 
-        {/* SECTION HEADER */}
-        <div className="mb-12 max-w-[960px]">
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-4 flex items-center gap-3"
-          >
-            <span className="h-[3px] w-10 rounded-full bg-[#EF4444]" />
+        
+{/* SECTION HEADER - COMPACT & CENTER */}
+<motion.div
+  initial={{ opacity: 0, y: 15 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6 }}
+  className="mx-auto mb-9 max-w-[1250px] text-center"
+>
+  {/* EYEBROW */}
+  <div className="mb-3 flex items-center justify-center gap-3">
+    <span className="h-[2px] w-7 bg-[#EF4444]" />
 
-            <span className="text-[12px] font-extrabold uppercase tracking-[0.16em] text-[#68736D] sm:text-[13px]">
-              {t.eyebrow}
-            </span>
-          </motion.div>
+    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#68736D]">
+      {t.eyebrow}
+    </span>
 
-          <motion.h2
-            key={`${language}-institutions-heading`}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.65 }}
-            className="text-[35px] font-black leading-[1.15] tracking-tight text-[#252B2D] sm:text-[46px] lg:text-[52px]"
-          >
-            {t.heading1}
-            <br />
-            <span className="text-[#EF4444]">
-              {t.heading2}
-            </span>
-          </motion.h2>
+    <span className="h-[2px] w-7 bg-[#EF4444]" />
+  </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-5 max-w-[900px] text-[16px] leading-[1.85] text-[#65706B] sm:text-[18px]"
-          >
-            {t.description}
-          </motion.p>
-        </div>
+  {/* ONE LINE HEADING */}
+  <h2 className="text-[28px] font-black leading-[1.2] tracking-tight text-[#252B2D] sm:text-[36px] lg:whitespace-nowrap lg:text-[43px] xl:text-[46px]">
+    {t.heading1}{" "}
+    <span className="text-[#EF4444]">
+      {t.heading2}
+    </span>
+  </h2>
+
+  {/* SHORT DESCRIPTION */}
+  <p className="mx-auto mt-3 max-w-[750px] text-[14px] leading-[1.7] text-[#65706B] sm:text-[15px]">
+    {language === "mr"
+      ? "तीन शैक्षणिक संस्थांमधून रोजगाराभिमुख पॅरामेडिकल व व्यावसायिक शिक्षण."
+      : "Career-focused paramedical and vocational education through three associated institutions."}
+  </p>
+</motion.div>
+
 
         {/* MAIN INTERACTIVE LAYOUT */}
         <div className="grid items-stretch gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
@@ -290,16 +285,7 @@ export default function EducationalInstitutions() {
                     </span>
                   </div>
 
-                  <Link
-                    to={colleges[active].link}
-                    className="group mt-6 inline-flex items-center gap-3 rounded-full bg-[#EF4444] px-6 py-3 text-[14px] font-bold text-white transition-colors hover:bg-[#DC2626]"
-                  >
-                    {t.explore}
-                    <ArrowUpRight
-                      size={18}
-                      className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-                    />
-                  </Link>
+                  
                 </motion.div>
               </AnimatePresence>
             </div>

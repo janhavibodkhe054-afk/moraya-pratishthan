@@ -16,12 +16,12 @@ const supporters = [
   {
     name: "Bajaj Finserv CSR",
     shortName: "Bajaj Finserv",
-    logo: "/images/partners/bajaj-finserv.png",
+    logo: "/bajaj.webp",
   },
   {
     name: "SOS Children's Villages India",
     shortName: "SOS Children's Villages",
-    logo: "/images/partners/sos-childrens-villages.png",
+    logo: "/sos.webp",
   },
 ];
 

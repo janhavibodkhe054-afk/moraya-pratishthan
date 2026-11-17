@@ -7,6 +7,7 @@ import CoursesSection from '../components/home/CoursesSection'
 import CSRPartnershipsSection from '../components/home/CSRPartnershipsSection'
 import InternationalExposureSection from '../components/home/InternationalExposureSection'
 import FinalCTASection from '../components/home/FinalCTASection'
+import ClinicalExposureSection from '../components/home/ClinicalExposureSection'
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <FocusAreasSection/>
       <EducationalInstitutions/>
       <CoursesSection/>
+      <ClinicalExposureSection/>
       <CSRPartnershipsSection/>
       <InternationalExposureSection/>
       <FinalCTASection/>

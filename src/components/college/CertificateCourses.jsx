@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../../context/Languagecontext";
 
+
 const courses = [
   {
     number: "01",
@@ -22,9 +23,9 @@ const courses = [
     en: "Certificate in Operation Theatre Technician",
     mr: "ऑपरेशन थिएटर टेक्निशियन प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Introduction to operation theatre procedures, equipment and patient care support.",
+      "Learn the fundamentals of operation theatre procedures, surgical instruments, equipment preparation, sterilization practices and patient care assistance in a clinical environment.",
     descMr:
-      "ऑपरेशन थिएटर प्रक्रिया, उपकरणे आणि रुग्णसेवा सहाय्याची ओळख.",
+      "ऑपरेशन थिएटरमधील प्रक्रिया, शस्त्रक्रियेसाठी वापरली जाणारी उपकरणे, निर्जंतुकीकरण पद्धती, उपकरणांची तयारी आणि रुग्णसेवा सहाय्याची मूलभूत माहिती.",
   },
   {
     number: "02",
@@ -32,9 +33,9 @@ const courses = [
     en: "Certificate in Dialysis Technician",
     mr: "डायलिसिस टेक्निशियन प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Fundamentals of dialysis procedures, equipment handling and patient support.",
+      "Understand the basics of dialysis procedures, dialysis machine operation, equipment handling, infection prevention and patient monitoring under professional supervision.",
     descMr:
-      "डायलिसिस प्रक्रिया, उपकरण हाताळणी आणि रुग्णसेवेची मूलभूत माहिती.",
+      "डायलिसिस प्रक्रिया, डायलिसिस मशीनची मूलभूत कार्यपद्धती, उपकरण हाताळणी, संसर्ग प्रतिबंध आणि तज्ज्ञांच्या देखरेखीखाली रुग्ण निरीक्षणाचे प्रशिक्षण.",
   },
   {
     number: "03",
@@ -42,9 +43,9 @@ const courses = [
     en: "Certificate in Dental Assistant Technician",
     mr: "डेंटल असिस्टंट टेक्निशियन प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Basic dental clinic assistance, instrument handling and hygiene practices.",
+      "Develop foundational skills in dental clinic assistance, instrument preparation, sterilization, patient coordination and maintaining hygiene in dental care settings.",
     descMr:
-      "दंतचिकित्सा सहाय्य, उपकरण हाताळणी आणि स्वच्छतेच्या पद्धती.",
+      "दंतचिकित्सा केंद्रातील सहाय्यक कामे, उपकरणांची तयारी, निर्जंतुकीकरण, रुग्णांशी समन्वय आणि दंतचिकित्सा विभागातील स्वच्छतेच्या पद्धतींचे प्रशिक्षण.",
   },
   {
     number: "04",
@@ -52,9 +53,9 @@ const courses = [
     en: "Certificate in Prosthetic & Orthotic Technician",
     mr: "प्रोस्थेटिक आणि ऑर्थोटिक टेक्निशियन प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Introduction to prosthetic and orthotic devices and technical support.",
+      "Gain introductory knowledge of prosthetic and orthotic devices, basic measurements, device preparation, fitting assistance and technical support in rehabilitation services.",
     descMr:
-      "प्रोस्थेटिक व ऑर्थोटिक उपकरणे आणि तांत्रिक सहाय्याची ओळख.",
+      "कृत्रिम अवयव आणि ऑर्थोटिक उपकरणांची ओळख, मूलभूत मोजमाप, उपकरणांची तयारी, फिटिंगसाठी सहाय्य आणि पुनर्वसन सेवांमधील तांत्रिक कामांची माहिती.",
   },
   {
     number: "05",
@@ -62,9 +63,9 @@ const courses = [
     en: "Certificate in GNM Assistant Technician",
     mr: "GNM असिस्टंट टेक्निशियन प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Foundational nursing assistance and patient care support skills.",
+      "Build foundational nursing assistance skills, including patient hygiene, basic care procedures, vital signs awareness, patient comfort and support in healthcare environments.",
     descMr:
-      "मूलभूत नर्सिंग सहाय्य आणि रुग्णसेवा कौशल्यांची ओळख.",
+      "रुग्णांची स्वच्छता, प्राथमिक रुग्णसेवा, महत्त्वाच्या शारीरिक लक्षणांची ओळख, रुग्णांच्या आरामाची काळजी आणि आरोग्यसेवा विभागातील नर्सिंग सहाय्य.",
   },
   {
     number: "06",
@@ -72,9 +73,9 @@ const courses = [
     en: "Certificate in Nursing Care",
     mr: "नर्सिंग केअर प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Essential patient care, hygiene and everyday nursing support.",
+      "Learn essential patient care practices, personal hygiene support, mobility assistance, basic nursing responsibilities and compassionate care for patients in everyday healthcare settings.",
     descMr:
-      "रुग्णांची मूलभूत काळजी, स्वच्छता आणि नर्सिंग सहाय्य.",
+      "रुग्णांची दैनंदिन काळजी, वैयक्तिक स्वच्छता, हालचालींसाठी सहाय्य, नर्सिंगमधील मूलभूत जबाबदाऱ्या आणि रुग्णांना संवेदनशीलतेने मदत करण्याचे कौशल्य.",
   },
   {
     number: "07",
@@ -82,9 +83,9 @@ const courses = [
     en: "Certificate in ICU Technician",
     mr: "ICU टेक्निशियन प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Introduction to ICU equipment, monitoring and critical care assistance.",
+      "Explore the fundamentals of intensive care unit equipment, patient monitoring systems, infection control, critical care assistance and supporting healthcare professionals in ICU settings.",
     descMr:
-      "ICU उपकरणे, रुग्ण निरीक्षण आणि अतिदक्षता सहाय्याची ओळख.",
+      "अतिदक्षता विभागातील उपकरणे, रुग्ण निरीक्षण प्रणाली, संसर्ग नियंत्रण, गंभीर रुग्णांच्या सेवेसाठी सहाय्य आणि ICU मधील आरोग्य कर्मचाऱ्यांना मदत करण्याचे प्रशिक्षण.",
   },
   {
     number: "08",
@@ -92,9 +93,9 @@ const courses = [
     en: "Certificate in Pre-School Teachers Training",
     mr: "प्री-स्कूल टीचर्स ट्रेनिंग प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Early childhood learning, classroom activities and teaching fundamentals.",
+      "Develop an understanding of early childhood education, child development, creative classroom activities, lesson planning and age-appropriate teaching methods for preschool learners.",
     descMr:
-      "बालशिक्षण, वर्गातील उपक्रम आणि अध्यापनाच्या मूलभूत पद्धती.",
+      "बालविकास, पूर्वप्राथमिक शिक्षण, सर्जनशील वर्ग उपक्रम, पाठ नियोजन आणि लहान मुलांच्या वयोगटानुसार योग्य अध्यापन पद्धतींचे व्यावहारिक ज्ञान.",
   },
   {
     number: "09",
@@ -102,9 +103,9 @@ const courses = [
     en: "Certificate in Construction Supervisor",
     mr: "कन्स्ट्रक्शन सुपरवायझर प्रमाणपत्र अभ्यासक्रम",
     descEn:
-      "Basics of site supervision, construction processes and workplace safety.",
+      "Learn the basics of construction site supervision, material handling, work planning, coordination with site teams, quality awareness and essential workplace safety practices.",
     descMr:
-      "बांधकाम स्थळ पर्यवेक्षण, प्रक्रिया आणि कामाच्या ठिकाणची सुरक्षितता.",
+      "बांधकाम स्थळाचे पर्यवेक्षण, साहित्य हाताळणी, कामाचे नियोजन, कामगारांशी समन्वय, कामाच्या गुणवत्तेची जाणीव आणि आवश्यक सुरक्षा पद्धतींचे प्रशिक्षण.",
   },
 ];
 
@@ -210,12 +211,12 @@ export default function CertificateCourses() {
                 </div>
 
                 {/* COURSE NAME */}
-                <h3 className="text-[16px] font-extrabold leading-[1.45] tracking-[-0.015em] text-[#17392E] sm:text-[17px]">
+                <h3 className="text-[17px] font-extrabold leading-[1.45] tracking-[-0.015em] text-[#17392E] sm:text-[18px]">
                   {isMarathi ? course.mr : course.en}
                 </h3>
 
                 {/* SHORT DESCRIPTION */}
-                <p className="mt-2.5 flex-1 text-[12.5px] leading-[1.7] text-[#728077]">
+                <p className="mt-2.5 flex-1 text-[13.5px] leading-[1.7] text-[#728077]">
                   {isMarathi ? course.descMr : course.descEn}
                 </p>
 

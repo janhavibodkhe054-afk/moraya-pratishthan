@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../../context/Languagecontext";
 
 const IMAGE_URL =
-  "https://images.openai.com/static-rsc-4/NVOXN7qT3F6Q3ASLWFPaFTsZOmMyf9j3hyvYroGGs9hSHADXEnuvvPw3uNW2LahVZGK0Bc_ib7363pMCzcj-W3BHVK0vn6QmyNwUuRZj67axXWaq5gCHHDV6qKd_eiJTKf2nl1_cQedYo4kCz49JiplW87nzVbUDZIdge3jIM-Y?purpose=inline";
+  "/40.webp";
 
 export default function BloodDonationInitiative() {
   const { language } = useLanguage();

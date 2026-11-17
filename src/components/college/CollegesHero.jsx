@@ -115,7 +115,7 @@ export default function CollegesHero() {
             </Link>
 
             <Link
-              to="/enquiry"
+              to="/contact"
               className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D5E2D7] bg-white px-7 py-3.5 text-[14px] font-bold text-[#17392E] transition-all duration-300 hover:-translate-y-1 hover:border-[#006B2E] hover:shadow-md"
             >
               {content.apply}

@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Send,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
   ShieldCheck,
+  ArrowUpRight,
+  MessageCircle,
 } from "lucide-react";
 import { useLanguage } from "../../context/Languagecontext";
+
+// WhatsApp number with country code, without + or spaces
+const WHATSAPP_NUMBER = "919422036639";
 
 const initialForm = {
   fullName: "",
@@ -25,8 +27,6 @@ export default function ContactForm() {
   const reduceMotion = useReducedMotion();
 
   const [form, setForm] = useState(initialForm);
-  const [status, setStatus] = useState("idle");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const content = isMarathi
     ? {
@@ -47,13 +47,11 @@ export default function ContactForm() {
         message: "तुमचा संदेश",
         consent:
           "माझ्या चौकशीला उत्तर देण्यासाठी मोरया सामाजिक प्रतिष्ठानने माझी दिलेली माहिती वापरण्यास मी संमती देतो/देते.",
-        submit: "संदेश पाठवा",
-        sending: "संदेश पाठवत आहे...",
-        success:
-          "मोरया सामाजिक प्रतिष्ठानशी संपर्क साधल्याबद्दल धन्यवाद. तुमचा संदेश प्राप्त झाला आहे. आमची टीम शक्य तितक्या लवकर उत्तर देईल.",
-        error:
-          "संदेश पाठवता आला नाही. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.",
-        privacy: "तुमची माहिती चौकशीला उत्तर देण्यासाठी वापरली जाईल.",
+        submit: "WhatsApp वर संदेश पाठवा",
+        privacy:
+          "तुमची माहिती केवळ चौकशीला उत्तर देण्यासाठी वापरली जाईल.",
+        whatsappInfo:
+          "संदेश पाठवण्यासाठी WhatsApp उघडेल.",
       }
     : {
         eyebrow: "GET IN TOUCH",
@@ -73,14 +71,11 @@ export default function ContactForm() {
         message: "Message",
         consent:
           "I consent to Morya Samajik Pratishthan using the information provided to respond to my enquiry.",
-        submit: "Send Message",
-        sending: "Sending Message...",
-        success:
-          "Thank you for contacting Morya Samajik Pratishthan. Your message has been received, and our team will respond as soon as possible.",
-        error:
-          "Your message could not be sent. Please try again later.",
+        submit: "Send Message on WhatsApp",
         privacy:
-          "Your information will be used to respond to your enquiry.",
+          "Your information will only be used to respond to your enquiry.",
+        whatsappInfo:
+          "WhatsApp will open to send your message.",
       };
 
   const handleChange = (event) => {
@@ -90,54 +85,52 @@ export default function ContactForm() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-
-    if (status !== "idle") {
-      setStatus("idle");
-      setErrorMessage("");
-    }
   };
 
-  const handleSubmit = async (event) => {
+  // DIRECT WHATSAPP SUBMISSION - NO BACKEND
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (status === "submitting") return;
+    if (!form.privacyConsent) return;
 
-    setStatus("submitting");
-    setErrorMessage("");
+    const enquiryLabels = {
+      admission: isMarathi ? "प्रवेश" : "Admission",
+      csr: "CSR",
+      partnership: isMarathi ? "भागीदारी" : "Partnership",
+      general: isMarathi ? "सामान्य चौकशी" : "General",
+    };
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: form.fullName.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          enquiryType: form.enquiryType,
-          message: form.message.trim(),
-          privacyConsent: form.privacyConsent,
-        }),
-      });
+    const whatsappMessage = [
+      "*NEW WEBSITE ENQUIRY*",
+      "*Morya Samajik Pratishthan*",
+      "",
+      "----------------------------",
+      "",
+      `*Full Name:* ${form.fullName.trim()}`,
+      "",
+      `*Email:* ${form.email.trim()}`,
+      "",
+      `*Phone:* ${form.phone.trim()}`,
+      "",
+      `*Enquiry Type:* ${
+        enquiryLabels[form.enquiryType] || form.enquiryType
+      }`,
+      "",
+      "*Message:*",
+      form.message.trim(),
+      "",
+      "----------------------------",
+      "",
+      "_Enquiry submitted through the official website._",
+    ].join("\n");
 
-      // Success only when the server explicitly confirms acceptance.
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
+    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
 
-      const result = await response.json();
-
-      if (result.success !== true) {
-        throw new Error("Enquiry was not accepted");
-      }
-
-      setStatus("success");
-      setForm(initialForm);
-    } catch (error) {
-      setStatus("error");
-      setErrorMessage(content.error);
-    }
+    // Open WhatsApp in the same tab.
+    // This works on desktop and mobile browsers.
+    window.location.href = whatsappURL;
   };
 
   const inputClass =
@@ -159,8 +152,11 @@ export default function ContactForm() {
       className="bg-[#F8FBF8] py-14 sm:py-16 lg:py-20"
     >
       <div className="mx-auto grid max-w-[1200px] gap-9 px-5 sm:px-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16 lg:px-12">
+
         {/* LEFT CONTENT */}
         <motion.div {...reveal} className="lg:pt-8">
+
+          {/* EYEBROW */}
           <div className="mb-4 flex items-center gap-3">
             <span className="h-[2px] w-8 bg-[#EF4444]" />
 
@@ -169,6 +165,7 @@ export default function ContactForm() {
             </span>
           </div>
 
+          {/* HEADING */}
           <h2 className="text-[clamp(1.85rem,2.7vw,2.65rem)] font-extrabold leading-[1.2] tracking-[-0.035em] text-[#17392E]">
             {content.heading1}{" "}
             <span className="text-[#EF4444]">
@@ -176,10 +173,12 @@ export default function ContactForm() {
             </span>
           </h2>
 
+          {/* DESCRIPTION */}
           <p className="mt-4 max-w-[380px] text-[14px] leading-[1.85] text-[#66746B]">
             {content.description}
           </p>
 
+          {/* PRIVACY NOTE */}
           <div className="mt-7 flex max-w-[360px] items-start gap-3 border-t border-[#DEE8E0] pt-5">
             <ShieldCheck
               size={21}
@@ -190,50 +189,36 @@ export default function ContactForm() {
               {content.privacy}
             </p>
           </div>
+
+          {/* WHATSAPP INFORMATION */}
+          <div className="mt-5 flex max-w-[360px] items-center gap-3 rounded-xl border border-[#D5E9D9] bg-[#EFF8F0] px-4 py-3">
+            <MessageCircle
+              size={19}
+              className="shrink-0 text-[#006B2E]"
+            />
+
+            <p className="text-[12px] font-medium leading-[1.6] text-[#386247]">
+              {content.whatsappInfo}
+            </p>
+          </div>
         </motion.div>
 
-        {/* FORM */}
+        {/* CONTACT FORM */}
         <motion.div
           {...reveal}
           className="rounded-[18px] border border-[#E0EAE2] bg-white p-5 shadow-[0_15px_45px_rgba(23,57,46,0.045)] sm:p-7"
         >
-          {status === "success" && (
-            <div
-              role="status"
-              aria-live="polite"
-              className="mb-6 flex items-start gap-3 rounded-xl border border-[#BBDDC5] bg-[#F0FAF2] p-4"
-            >
-              <CheckCircle2
-                size={21}
-                className="shrink-0 text-[#006B2E]"
-              />
-
-              <p className="text-[13px] leading-[1.7] text-[#17392E]">
-                {content.success}
-              </p>
-            </div>
-          )}
-
-          {status === "error" && (
-            <div
-              role="alert"
-              className="mb-6 flex items-start gap-3 rounded-xl border border-[#F2C7C7] bg-[#FFF5F5] p-4"
-            >
-              <AlertCircle
-                size={21}
-                className="shrink-0 text-[#DC4444]"
-              />
-
-              <p className="text-[13px] leading-[1.7] text-[#A83232]">
-                {errorMessage}
-              </p>
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-5">
+
+            {/* NAME & EMAIL */}
             <div className="grid gap-5 sm:grid-cols-2">
+
+              {/* FULL NAME */}
               <div>
-                <label htmlFor="contact-full-name" className={labelClass}>
+                <label
+                  htmlFor="contact-full-name"
+                  className={labelClass}
+                >
                   {content.name} *
                 </label>
 
@@ -251,8 +236,12 @@ export default function ContactForm() {
                 />
               </div>
 
+              {/* EMAIL */}
               <div>
-                <label htmlFor="contact-email" className={labelClass}>
+                <label
+                  htmlFor="contact-email"
+                  className={labelClass}
+                >
                   {content.email} *
                 </label>
 
@@ -271,9 +260,15 @@ export default function ContactForm() {
               </div>
             </div>
 
+            {/* PHONE & ENQUIRY */}
             <div className="grid gap-5 sm:grid-cols-2">
+
+              {/* PHONE */}
               <div>
-                <label htmlFor="contact-phone" className={labelClass}>
+                <label
+                  htmlFor="contact-phone"
+                  className={labelClass}
+                >
                   {content.phone} *
                 </label>
 
@@ -293,8 +288,12 @@ export default function ContactForm() {
                 />
               </div>
 
+              {/* ENQUIRY TYPE */}
               <div>
-                <label htmlFor="contact-enquiry" className={labelClass}>
+                <label
+                  htmlFor="contact-enquiry"
+                  className={labelClass}
+                >
                   {content.enquiry} *
                 </label>
 
@@ -306,17 +305,35 @@ export default function ContactForm() {
                   required
                   className={inputClass}
                 >
-                  <option value="">{content.select}</option>
-                  <option value="admission">{content.admission}</option>
-                  <option value="csr">{content.csr}</option>
-                  <option value="partnership">{content.partnership}</option>
-                  <option value="general">{content.general}</option>
+                  <option value="">
+                    {content.select}
+                  </option>
+
+                  <option value="admission">
+                    {content.admission}
+                  </option>
+
+                  <option value="csr">
+                    {content.csr}
+                  </option>
+
+                  <option value="partnership">
+                    {content.partnership}
+                  </option>
+
+                  <option value="general">
+                    {content.general}
+                  </option>
                 </select>
               </div>
             </div>
 
+            {/* MESSAGE */}
             <div>
-              <label htmlFor="contact-message" className={labelClass}>
+              <label
+                htmlFor="contact-message"
+                className={labelClass}
+              >
                 {content.message} *
               </label>
 
@@ -325,14 +342,15 @@ export default function ContactForm() {
                 name="message"
                 value={form.message}
                 onChange={handleChange}
-                rows={4}
-                maxLength={3000}
+                rows={5}
+                maxLength={2000}
                 required
                 className={`${inputClass} resize-y`}
                 placeholder={content.message}
               />
             </div>
 
+            {/* PRIVACY CONSENT */}
             <label className="flex cursor-pointer items-start gap-3">
               <input
                 type="checkbox"
@@ -348,21 +366,21 @@ export default function ContactForm() {
               </span>
             </label>
 
+            {/* SUBMIT BUTTON */}
             <button
               type="submit"
-              disabled={status === "submitting"}
-              className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#006B2E] px-7 py-3.5 text-[13px] font-extrabold text-white transition-all hover:bg-[#005323] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#006B2E] px-7 py-3.5 text-[13px] font-extrabold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#005323] hover:shadow-[0_8px_20px_rgba(0,107,46,0.2)] sm:w-auto"
             >
-              {status === "submitting" ? (
-                <Loader2 size={18} className="animate-spin" />
-              ) : (
-                <Send size={17} />
-              )}
+              <Send size={17} />
 
-              {status === "submitting"
-                ? content.sending
-                : content.submit}
+              {content.submit}
+
+              <ArrowUpRight
+                size={17}
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
             </button>
+
           </form>
         </motion.div>
       </div>

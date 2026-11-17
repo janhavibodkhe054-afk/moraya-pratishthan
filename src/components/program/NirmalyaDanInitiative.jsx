@@ -12,7 +12,7 @@ import {
 import { useLanguage } from "../../context/Languagecontext";
 
 const IMAGE_URL =
-  "https://images.openai.com/static-rsc-4/EDFdpMehGE1vnOjoPGElKTGp5RpClDVD3F_T_r0v8EnYawu1it-b3TGPdP44XTrIKXxGpTV62n3balN01ogb5X4XdWDL04AlR0g5Sm--JClwHwfZI74Heu1ShnQcdQqpXoGhLKfQoXW9djrB9PsWgPh2BZNTQiRSqk91blWO_UQ?purpose=inline";
+  "/54.webp";
 
 const steps = [
   {

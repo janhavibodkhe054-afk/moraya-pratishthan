@@ -15,9 +15,9 @@ import { useLanguage } from "../../context/Languagecontext";
 // Replace with actual organization photographs when available
 const images = {
   main:
-    "https://images.openai.com/static-rsc-4/Qv7klvp3HU86BZpyIc7dFEmfnc1gOUWwBLPo_m-ARGQv7StfKxmF67MPfUq0okUE0NSxj1eM3Y7B-l-v_Ta8q7kBmPd1LwMt7p9oVK7nfD83LViIZnOgWT7zQcH2rai3DpwL2kXOBmoE6iNkODWsYI2OlBOGrmJmP-LfjBsuWRI?purpose=inline",
+    "/20.webp",
   secondary:
-    "https://images.openai.com/static-rsc-4/24wLOF9v5jYLZI6Z8KTpHx72ZeDo_H2iZxTttzNbgfv9dqcIVrGU2q9xxrIG4B0RTI5AJ1CVGFHfnsvAUq3zF71xtDpgkUyVboKTRmhTvf5hcLTPKwc-XFnxXvPbzQzCMTO8BORsOdfEx3WaE0W4QoHAwRVpbw_dwmWVsWMkUp4?purpose=inline",
+    "/logo.jpeg",
 };
 
 const content = {

@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useLanguage } from "../../context/Languagecontext";
 
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=2000&q=85";
+  "52.webp";
 
 export default function ContactHero() {
   const { language } = useLanguage();
@@ -53,9 +53,9 @@ export default function ContactHero() {
       </div>
 
       {/* DARK GREEN OVERLAY */}
-      <div className="absolute inset-0 bg-[#102D24]/75" />
+      <div className="absolute inset-0 bg-[#102D24]/35" />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-[#10291F]/95 via-[#17392E]/80 to-[#10291F]/75" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#10291F]/85 via-[#17392E]/80 to-[#10291F]/75" />
 
       {/* SOFT GLOW */}
       <div className="pointer-events-none absolute -right-28 -top-28 h-[350px] w-[350px] rounded-full bg-[#EF4444]/10 blur-[100px]" />

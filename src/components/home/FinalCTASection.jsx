@@ -89,7 +89,7 @@ export default function FinalCTASection() {
           >
             {/* STUDENT BUTTON */}
             <Link
-              to="/enquiry"
+              to="/contact"
               className="group inline-flex min-h-[51px] w-full items-center justify-between gap-5 rounded-xl bg-[#EF4444] px-6 text-[15px] font-extrabold text-white transition-all duration-300 hover:bg-[#DC2626] sm:w-auto lg:w-[270px]"
             >
               <span className="flex items-center gap-3">

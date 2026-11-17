@@ -228,22 +228,11 @@ export default function ContactInformation() {
                   </span>
                 </div>
 
-                <a
-                  href={`mailto:${email}`}
-                  className="block break-all text-[13px] font-bold leading-[1.7] text-[#17392E] transition-colors hover:text-[#EF4444]"
-                >
-                  {email}
-                </a>
+                
               </div>
             </div>
 
-            <a
-              href={`mailto:${email}`}
-              className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#006B2E] px-5 py-3 text-[13px] font-extrabold text-white transition-colors hover:bg-[#005323]"
-            >
-              {content.emailUs}
-              <ArrowUpRight size={17} />
-            </a>
+            
           </motion.aside>
         </div>
       </div>
