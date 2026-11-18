@@ -19,63 +19,119 @@ import {
   ChevronLeft,
   ChevronRight,
   ZoomIn,
+  Images,
+  Award,
 } from "lucide-react";
 
-// All 55 WebP images
-const galleryImages = Array.from({ length: 55 }, (_, index) => ({
-  id: index + 1,
-  src: `/${index + 1}.webp`,
-  alt: `Morya Samajik Pratishthan Gallery Photo ${index + 1}`,
-}));
+// ======================================
+// PHOTO GALLERY - EXISTING 55 PHOTOS
+// ======================================
+
+const galleryImages = Array.from(
+  { length: 55 },
+  (_, index) => ({
+    id: index + 1,
+    src: `/${index + 1}.webp`,
+    alt: `Morya Samajik Pratishthan Gallery Photo ${index + 1}`,
+  })
+);
+
+// ======================================
+// CERTIFICATES
+// ======================================
+
+// Place certificate images inside:
+// public/certificates/1.webp
+// public/certificates/2.webp
+// etc.
+//
+// Change this count to match the actual
+// number of certificate images uploaded.
+
+const CERTIFICATE_COUNT = 71;
+
+const certificateImages = Array.from(
+  { length: CERTIFICATE_COUNT },
+  (_, index) => ({
+    id: index + 1,
+    src: `/${index + 1}.png`,
+    alt: `Morya Samajik Pratishthan Certificate ${index + 1}`,
+  })
+);
 
 export default function GallerySection() {
   const reduceMotion = useReducedMotion();
 
+  const [activeTab, setActiveTab] = useState("gallery");
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   const closeButtonRef = useRef(null);
   const previousFocusRef = useRef(null);
 
+  const activeImages =
+    activeTab === "gallery"
+      ? galleryImages
+      : certificateImages;
+
   const selectedImage =
     selectedIndex === null
       ? null
-      : galleryImages[selectedIndex];
+      : activeImages[selectedIndex] || null;
 
-  // Open Lightbox
+  // ======================================
+  // TAB SWITCH
+  // ======================================
+
+  const changeTab = (tab) => {
+    setSelectedIndex(null);
+    setActiveTab(tab);
+  };
+
+  // ======================================
+  // LIGHTBOX CONTROLS
+  // ======================================
+
   const openLightbox = (index) => {
     previousFocusRef.current = document.activeElement;
     setSelectedIndex(index);
   };
 
-  // Close Lightbox
   const closeLightbox = useCallback(() => {
     setSelectedIndex(null);
   }, []);
 
-  // Next Image
   const nextImage = useCallback(() => {
-    setSelectedIndex((prev) =>
-      prev === null
-        ? null
-        : (prev + 1) % galleryImages.length
-    );
-  }, []);
+    setSelectedIndex((prev) => {
+      if (prev === null || activeImages.length === 0) {
+        return null;
+      }
 
-  // Previous Image
+      return (prev + 1) % activeImages.length;
+    });
+  }, [activeImages.length]);
+
   const previousImage = useCallback(() => {
-    setSelectedIndex((prev) =>
-      prev === null
-        ? null
-        : (prev - 1 + galleryImages.length) %
-          galleryImages.length
-    );
-  }, []);
+    setSelectedIndex((prev) => {
+      if (prev === null || activeImages.length === 0) {
+        return null;
+      }
 
-  // Keyboard Controls + Scroll Lock
+      return (
+        (prev - 1 + activeImages.length) %
+        activeImages.length
+      );
+    });
+  }, [activeImages.length]);
+
+  // ======================================
+  // KEYBOARD + SCROLL LOCK
+  // ======================================
+
   useEffect(() => {
     if (selectedIndex === null) return;
 
-    const previousOverflow = document.body.style.overflow;
+    const previousOverflow =
+      document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
 
@@ -129,7 +185,10 @@ export default function GallerySection() {
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
   }, [
     selectedIndex,
@@ -138,76 +197,216 @@ export default function GallerySection() {
     previousImage,
   ]);
 
-  // Restore Focus After Closing
+  // Restore focus
   useEffect(() => {
     if (selectedIndex === null) {
       previousFocusRef.current?.focus?.();
     }
   }, [selectedIndex]);
 
+  const tabs = [
+    {
+      id: "gallery",
+      label: "Photo Gallery",
+      icon: Images,
+    },
+    {
+      id: "certificates",
+      label: "Certificates",
+      icon: Award,
+    },
+  ];
+
   return (
     <>
-      {/* ================= GALLERY SECTION ================= */}
+      {/* ======================================
+          GALLERY SECTION
+      ====================================== */}
 
       <section
         id="gallery-grid"
-        className="relative isolate min-h-[350px] bg-[#101614] py-8 sm:py-10 lg:py-12"
+        className="relative isolate min-h-[350px] overflow-hidden bg-[#101614] py-10 sm:py-12"
       >
-        {/* Dark Background */}
+        {/* Background */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#15211B] via-[#101614] to-[#0B110E]" />
 
-        {/* Subtle Glow */}
         <div className="pointer-events-none absolute -left-32 top-20 h-[350px] w-[350px] rounded-full bg-[#006B2E]/10 blur-[110px]" />
 
         <div className="pointer-events-none absolute -right-32 bottom-20 h-[350px] w-[350px] rounded-full bg-[#EF4444]/[0.04] blur-[110px]" />
 
         <div className="relative z-10 mx-auto max-w-[1500px] px-3 sm:px-5 lg:px-8">
 
-          {/* Masonry Gallery */}
-          <div className="columns-1 gap-3 sm:columns-2 sm:gap-4 lg:columns-3 xl:columns-4">
+          {/* ======================================
+              PREMIUM TABS
+          ====================================== */}
 
-            {galleryImages.map((image, index) => (
-              <motion.button
-                key={image.id}
-                type="button"
+          <div className="mb-9 flex justify-center sm:mb-11">
+            <div
+              role="tablist"
+              aria-label="Gallery categories"
+              className="inline-flex w-full max-w-[440px] items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.06] p-1.5 sm:w-auto"
+            >
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+
+                return (
+                  <button
+                    key={tab.id}
+                    id={`gallery-tab-${tab.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls="gallery-tab-panel"
+                    onClick={() => changeTab(tab.id)}
+                    className={`relative flex flex-1 items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-8 sm:text-[14px] ${
+                      isActive
+                        ? "text-white"
+                        : "text-white/55 hover:text-white"
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="gallery-active-tab"
+                        transition={{
+                          type: "spring",
+                          stiffness: 350,
+                          damping: 30,
+                        }}
+                        className="absolute inset-0 rounded-xl bg-[#EF4444] shadow-[0_6px_20px_rgba(239,68,68,0.22)]"
+                      />
+                    )}
+
+                    <Icon
+                      size={19}
+                      className="relative z-10 shrink-0"
+                    />
+
+                    <span className="relative z-10 whitespace-nowrap">
+                      {tab.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ======================================
+              TAB CONTENT
+          ====================================== */}
+
+          <div
+            id="gallery-tab-panel"
+            role="tabpanel"
+            aria-labelledby={`gallery-tab-${activeTab}`}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
                 initial={
                   reduceMotion
                     ? false
                     : { opacity: 0, y: 16 }
                 }
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{
-                  duration: 0.45,
-                  delay: Math.min(index * 0.025, 0.15),
+                animate={{
+                  opacity: 1,
+                  y: 0,
                 }}
-                onClick={() => openLightbox(index)}
-                aria-label={`Open gallery photo ${image.id}`}
-                className="group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-xl border border-white/10 bg-[#1C2721] text-left transition-all duration-300 hover:border-white/25 sm:mb-4"
+                exit={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: -10 }
+                }
+                transition={{ duration: 0.3 }}
               >
-                {/* Original Image Aspect Ratio */}
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  loading={index < 4 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.025]"
-                />
+                {activeImages.length > 0 ? (
+                  <div
+                    className={
+                      activeTab === "gallery"
+                        ? "columns-1 gap-3 sm:columns-2 sm:gap-4 lg:columns-3 xl:columns-4"
+                        : "grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    }
+                  >
+                    {activeImages.map((image, index) => (
+                      <motion.button
+                        key={`${activeTab}-${image.id}`}
+                        type="button"
+                        initial={
+                          reduceMotion
+                            ? false
+                            : { opacity: 0, y: 16 }
+                        }
+                        whileInView={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        viewport={{
+                          once: true,
+                          amount: 0.1,
+                        }}
+                        transition={{
+                          duration: 0.45,
+                          delay: Math.min(
+                            index * 0.025,
+                            0.15
+                          ),
+                        }}
+                        onClick={() => openLightbox(index)}
+                        aria-label={`Open ${image.alt}`}
+                        className={`group relative block w-full overflow-hidden rounded-xl border border-white/10 bg-[#1C2721] text-left transition-all duration-300 hover:border-white/30 ${
+                          activeTab === "gallery"
+                            ? "mb-3 break-inside-avoid sm:mb-4"
+                            : "p-2.5"
+                        }`}
+                      >
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          loading={
+                            index < 4 ? "eager" : "lazy"
+                          }
+                          decoding="async"
+                          className={
+                            activeTab === "gallery"
+                              ? "block h-auto w-full transition-transform duration-500 group-hover:scale-[1.025]"
+                              : "block h-auto max-h-[430px] w-full object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                          }
+                        />
 
-                {/* Hover Overlay */}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/35 group-hover:opacity-100">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-md">
-                    <ZoomIn size={21} />
-                  </span>
-                </div>
-              </motion.button>
-            ))}
+                        {/* Hover Overlay */}
+                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/35 group-hover:opacity-100">
+                          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-md">
+                            <ZoomIn size={21} />
+                          </span>
+                        </div>
+                      </motion.button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex min-h-[260px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.03] px-6 text-center">
+                    <Award
+                      size={38}
+                      className="mb-4 text-[#EF4444]"
+                    />
 
+                    <h3 className="text-[20px] font-bold text-white">
+                      Certificates
+                    </h3>
+
+                    <p className="mt-2 text-[14px] text-white/50">
+                      Certificate images will appear here.
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </section>
 
-      {/* ================= FULLSCREEN LIGHTBOX ================= */}
+      {/* ======================================
+          FULLSCREEN LIGHTBOX
+      ====================================== */}
 
       {typeof document !== "undefined" &&
         createPortal(
@@ -225,8 +424,7 @@ export default function GallerySection() {
                 onClick={closeLightbox}
                 className="fixed inset-0 z-[2147483647] flex items-center justify-center bg-[#030605]/95 px-3 py-16 backdrop-blur-xl sm:px-14"
               >
-
-                {/* Close Button */}
+                {/* Close */}
                 <button
                   ref={closeButtonRef}
                   type="button"
@@ -240,7 +438,7 @@ export default function GallerySection() {
                   <X size={26} />
                 </button>
 
-                {/* Previous Button */}
+                {/* Previous */}
                 <button
                   type="button"
                   data-gallery-lightbox-control
@@ -248,32 +446,43 @@ export default function GallerySection() {
                     event.stopPropagation();
                     previousImage();
                   }}
-                  aria-label="Previous photo"
+                  aria-label="Previous image"
                   className="fixed left-2 top-1/2 z-[2147483647] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#1C2721] text-white shadow-xl transition-all hover:bg-[#EF4444] sm:left-5"
                 >
                   <ChevronLeft size={25} />
                 </button>
 
-                {/* Full Image - No Cropping */}
+                {/* Full Image */}
                 <AnimatePresence mode="wait">
                   <motion.img
-                    key={selectedImage.id}
+                    key={`${activeTab}-${selectedImage.id}`}
                     src={selectedImage.src}
                     alt={selectedImage.alt}
                     initial={
                       reduceMotion
                         ? false
-                        : { opacity: 0, scale: 0.96 }
+                        : {
+                            opacity: 0,
+                            scale: 0.96,
+                          }
                     }
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.98,
+                    }}
                     transition={{ duration: 0.25 }}
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={(event) =>
+                      event.stopPropagation()
+                    }
                     className="relative z-10 max-h-[82vh] max-w-full select-none object-contain shadow-2xl"
                   />
                 </AnimatePresence>
 
-                {/* Next Button */}
+                {/* Next */}
                 <button
                   type="button"
                   data-gallery-lightbox-control
@@ -281,19 +490,20 @@ export default function GallerySection() {
                     event.stopPropagation();
                     nextImage();
                   }}
-                  aria-label="Next photo"
+                  aria-label="Next image"
                   className="fixed right-2 top-1/2 z-[2147483647] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#1C2721] text-white shadow-xl transition-all hover:bg-[#EF4444] sm:right-5"
                 >
                   <ChevronRight size={25} />
                 </button>
 
-                {/* Image Counter */}
+                {/* Counter */}
                 <div className="fixed bottom-5 left-1/2 z-[2147483647] -translate-x-1/2 rounded-full border border-white/20 bg-[#1C2721] px-5 py-2.5 text-[12px] font-semibold text-white/90 shadow-xl">
                   {selectedIndex + 1}
-                  <span className="mx-2 text-white/40">/</span>
-                  {galleryImages.length}
+                  <span className="mx-2 text-white/40">
+                    /
+                  </span>
+                  {activeImages.length}
                 </div>
-
               </motion.div>
             )}
           </AnimatePresence>,

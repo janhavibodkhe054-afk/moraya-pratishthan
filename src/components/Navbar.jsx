@@ -1,7 +1,20 @@
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Link,
+  NavLink,
+  useLocation,
+} from "react-router-dom";
+
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+} from "framer-motion";
 
 import {
   Phone,
@@ -11,6 +24,8 @@ import {
   X,
   ArrowUpRight,
   ArrowRight,
+  Heart,
+  Check,
 } from "lucide-react";
 
 import {
@@ -22,35 +37,14 @@ import {
 import { useLanguage } from "../context/Languagecontext";
 
 // ==========================================
-// BRAND & CONTACT DETAILS
+// BRAND INFORMATION
 // ==========================================
 
 const CONTACT = {
   phone: "+91 94220 36639",
-  whatsapp: "919422036639",
   email: "moryasamajikpratishthan@gmail.com",
-  location: "Chinchwad, Pune",
   logo: "/logo.jpeg",
 };
-
-// ==========================================
-// WHATSAPP ENQUIRY
-// ==========================================
-
-const getWhatsAppLink = (isMarathi) => {
-  const message = isMarathi
-    ? "नमस्कार, मला मोरया सामाजिक प्रतिष्ठानच्या अभ्यासक्रम आणि प्रवेश प्रक्रियेबद्दल माहिती हवी आहे."
-    : "Hello, I would like to enquire about the courses and admission process at Morya Samajik Pratishthan.";
-
-  return `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(
-    message
-  )}`;
-};
-
-// ==========================================
-// SOCIAL MEDIA LINKS
-// Add official profile URLs
-// ==========================================
 
 const SOCIALS = [
   {
@@ -78,6 +72,7 @@ const navItems = [
   { name: "Home", mr: "मुख्यपृष्ठ", path: "/" },
   { name: "About", mr: "आमच्याविषयी", path: "/about" },
   { name: "Colleges", mr: "महाविद्यालये", path: "/colleges" },
+  { name: "Courses", mr: "अभ्यासक्रम", path: "/courses" },
   { name: "Programs", mr: "उपक्रम", path: "/programs" },
   { name: "CSR", mr: "सीएसआर", path: "/csr" },
   {
@@ -99,23 +94,22 @@ const navItems = [
 // ==========================================
 
 function SocialIcons({ small = false }) {
-  const activeSocials = SOCIALS.filter(
-    (item) => item.url && item.url.trim()
+  const socials = SOCIALS.filter(
+    (item) => item.url?.trim()
   );
 
-  if (!activeSocials.length) return null;
+  if (!socials.length) return null;
 
   return (
     <div className="flex items-center gap-2">
-      {activeSocials.map(({ name, url, Icon }) => (
+      {socials.map(({ name, url, Icon }) => (
         <a
           key={name}
           href={url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={name}
-          title={name}
-          className={`flex items-center justify-center rounded-full bg-white text-[#17392E] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#EF4444] hover:text-white ${
+          className={`flex items-center justify-center rounded-full border border-white/20 bg-white/90 text-[#17392E] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#E8B6A3] hover:bg-[#FFF1EA] hover:text-[#C9533B] ${
             small ? "h-8 w-8" : "h-10 w-10"
           }`}
         >
@@ -123,6 +117,50 @@ function SocialIcons({ small = false }) {
         </a>
       ))}
     </div>
+  );
+}
+
+// ==========================================
+// DONATE BUTTON
+// ==========================================
+
+function DonateButton({
+  label,
+  mobile = false,
+  active = false,
+  onClick,
+}) {
+  return (
+    <Link
+      to="/donate"
+      onClick={onClick}
+      aria-current={active ? "page" : undefined}
+      className={`group relative isolate flex shrink-0 items-center justify-center overflow-hidden border border-[#FFB19D]/50 bg-gradient-to-br from-[#EF6250] via-[#E94F43] to-[#C83731] text-white shadow-[0_8px_22px_rgba(216,64,52,0.20)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(216,64,52,0.28)] ${
+        mobile
+          ? "w-full gap-3 rounded-2xl px-5 py-4 text-[16px] font-semibold"
+          : "h-[48px] gap-2.5 rounded-full px-5 text-[14px] font-semibold 2xl:px-6 2xl:text-[15px]"
+      }`}
+    >
+      {/* Glass highlight */}
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/25 to-transparent" />
+
+      {/* Animated light sweep */}
+      <span className="pointer-events-none absolute -left-[65%] top-[-80%] h-[260%] w-[45%] rotate-[25deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-[450%]" />
+
+      <Heart
+        size={mobile ? 19 : 17}
+        className="relative z-10 transition-transform duration-300 group-hover:scale-110"
+      />
+
+      <span className="relative z-10 whitespace-nowrap">
+        {label}
+      </span>
+
+      <ArrowUpRight
+        size={mobile ? 19 : 17}
+        className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+      />
+    </Link>
   );
 }
 
@@ -135,6 +173,7 @@ export default function Navbar() {
   const isMarathi = language === "mr";
 
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -142,14 +181,11 @@ export default function Navbar() {
   const mobileRef = useRef(null);
   const menuButtonRef = useRef(null);
 
-  const label = (en, mr) => (isMarathi ? mr : en);
+  const label = (en, mr) =>
+    isMarathi ? mr : en;
 
   const itemLabel = (item) =>
     isMarathi ? item.mr : item.name;
-
-  const closeMenu = () => setMobileOpen(false);
-
-  const whatsappLink = getWhatsAppLink(isMarathi);
 
   const isLinkActive = (path) => {
     if (path === "/") {
@@ -160,6 +196,10 @@ export default function Navbar() {
       location.pathname === path ||
       location.pathname.startsWith(`${path}/`)
     );
+  };
+
+  const closeMenu = () => {
+    setMobileOpen(false);
   };
 
   // ==========================================
@@ -177,12 +217,13 @@ export default function Navbar() {
       passive: true,
     });
 
-    return () =>
+    return () => {
       window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   // ==========================================
-  // CLOSE MOBILE MENU ON PAGE CHANGE
+  // CLOSE MENU ON ROUTE CHANGE
   // ==========================================
 
   useEffect(() => {
@@ -190,25 +231,27 @@ export default function Navbar() {
   }, [location.pathname]);
 
   // ==========================================
-  // MOBILE SCROLL LOCK & KEYBOARD
+  // MOBILE KEYBOARD & SCROLL LOCK
   // ==========================================
 
   useEffect(() => {
     if (!mobileOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
+    const previousOverflow =
+      document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
 
     const onKeyDown = (event) => {
       if (event.key === "Escape") {
-        closeMenu();
+        setMobileOpen(false);
       }
 
       if (event.key === "Tab") {
-        const focusable = mobileRef.current?.querySelectorAll(
-          'a[href], button:not([disabled])'
-        );
+        const focusable =
+          mobileRef.current?.querySelectorAll(
+            'a[href], button:not([disabled])'
+          );
 
         if (!focusable?.length) return;
 
@@ -236,8 +279,14 @@ export default function Navbar() {
     mobileRef.current?.focus();
 
     return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow =
+        previousOverflow;
+
+      window.removeEventListener(
+        "keydown",
+        onKeyDown
+      );
+
       menuButtonRef.current?.focus();
     };
   }, [mobileOpen]);
@@ -245,27 +294,31 @@ export default function Navbar() {
   return (
     <>
       {/* ======================================
-          HEADER
+          STICKY HEADER
       ====================================== */}
 
       <header className="sticky top-0 z-50 w-full">
 
-        {/* TOP BAR */}
-        <div className="bg-[#17392E] text-white">
-          <div className="mx-auto flex min-h-[42px] max-w-[1920px] items-center justify-between gap-4 px-5 sm:px-8 xl:px-10 2xl:px-14">
+        {/* TOP CONTACT BAR */}
+        <div className="relative overflow-hidden bg-[#17392E] text-white">
 
-            {/* LEFT CONTACT */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#102C22] via-[#17392E] to-[#285341]" />
+
+          <div className="relative mx-auto flex min-h-[42px] max-w-[1920px] items-center justify-between gap-4 px-5 sm:px-8 xl:px-10 2xl:px-14">
+
+            {/* LEFT */}
             <div className="flex items-center gap-6">
+
               <a
                 href={`mailto:${CONTACT.email}`}
-                className="hidden items-center gap-2 text-[12px] font-medium text-white/85 transition-colors hover:text-white md:flex"
+                className="hidden items-center gap-2 text-[12px] font-normal text-white/85 transition-colors hover:text-white md:flex"
               >
-                <Mail size={15} />
+                <Mail size={14} />
                 {CONTACT.email}
               </a>
 
-              <span className="flex items-center gap-2 text-[12px] font-medium text-white/85">
-                <MapPin size={15} />
+              <span className="flex items-center gap-2 text-[12px] font-normal text-white/85">
+                <MapPin size={14} />
                 {label(
                   "Chinchwad, Pune",
                   "चिंचवड, पुणे"
@@ -273,14 +326,15 @@ export default function Navbar() {
               </span>
             </div>
 
-            {/* RIGHT CONTACT */}
+            {/* RIGHT */}
             <div className="flex items-center gap-4">
+
               <a
                 href={`tel:${CONTACT.phone.replace(
                   /[^+\d]/g,
                   ""
                 )}`}
-                className="flex items-center gap-2 text-[12px] font-semibold text-white/90 transition-colors hover:text-white"
+                className="flex items-center gap-2 text-[12px] font-medium text-white/90 transition-colors hover:text-white"
               >
                 <Phone size={14} />
                 {CONTACT.phone}
@@ -298,38 +352,35 @@ export default function Navbar() {
         <motion.div
           animate={{
             boxShadow: scrolled
-              ? "0 8px 30px rgba(0,0,0,0.10)"
-              : "0 2px 8px rgba(0,0,0,0.04)",
+              ? "0 12px 35px rgba(15,45,33,0.11)"
+              : "0 2px 12px rgba(15,45,33,0.045)",
           }}
           transition={{ duration: 0.25 }}
-          className="relative bg-white"
+          className="relative border-b border-[#E5EBE6] bg-white/95 backdrop-blur-xl"
         >
-          <div className="mx-auto flex h-[88px] max-w-[1920px] items-center justify-between gap-5 px-5 sm:px-8 xl:gap-7 xl:px-10 2xl:h-[94px] 2xl:gap-10 2xl:px-14">
+          <div className="mx-auto flex h-[88px] max-w-[1920px] items-center justify-between gap-3 px-4 sm:px-7 xl:gap-4 xl:px-7 2xl:h-[94px] 2xl:gap-6 2xl:px-12">
 
-            {/* ==================================
-                LOGO
-            ================================== */}
-
+            {/* LOGO */}
             <Link
               to="/"
               onClick={closeMenu}
-              className="flex min-w-0 shrink-0 items-center gap-3"
+              className="group flex min-w-0 shrink-0 items-center gap-2.5"
             >
               <img
                 src={CONTACT.logo}
                 alt="Morya Samajik Pratishthan"
-                className="h-[68px] w-[68px] shrink-0 object-contain sm:h-[76px] sm:w-[76px] 2xl:h-[82px] 2xl:w-[82px]"
+                className="h-[65px] w-[65px] shrink-0 object-contain transition-transform duration-300 group-hover:scale-[1.035] sm:h-[74px] sm:w-[74px] 2xl:h-[80px] 2xl:w-[80px]"
               />
 
               <div className="min-w-0 leading-tight">
-                <p className="whitespace-nowrap text-[17px] font-black tracking-tight text-[#202725] sm:text-[19px] 2xl:text-[21px]">
+                <p className="whitespace-nowrap text-[17px] font-bold tracking-tight text-[#202725] sm:text-[19px] 2xl:text-[21px]">
                   {label("MORYA", "मोरया")}{" "}
                   <span className="text-[#EF4444]">
                     {label("SAMAJIK", "सामाजिक")}
                   </span>
                 </p>
 
-                <p className="text-[14px] font-extrabold tracking-[0.08em] text-[#006B2E] sm:text-[15px] 2xl:text-[17px]">
+                <p className="text-[14px] font-bold tracking-[0.075em] text-[#006B2E] sm:text-[15px] 2xl:text-[17px]">
                   {label(
                     "PRATISHTHAN",
                     "प्रतिष्ठान"
@@ -340,36 +391,61 @@ export default function Navbar() {
 
             {/* ==================================
                 DESKTOP NAVIGATION
-                MORE SPACING BETWEEN PAGES
             ================================== */}
 
             <nav
               aria-label="Main navigation"
-              className="hidden min-w-0 flex-1 items-center justify-center gap-3 xl:flex 2xl:gap-6 min-[1800px]:gap-8"
+              className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 min-[1450px]:flex 2xl:gap-1"
             >
               {navItems.map((item) => {
-                const active = isLinkActive(item.path);
+                const active =
+                  isLinkActive(item.path);
 
                 return (
                   <NavLink
                     key={item.path}
                     to={item.path}
-                    className={`group relative shrink-0 whitespace-nowrap px-1.5 py-8 text-[13px] font-bold tracking-[-0.02em] transition-colors duration-300 2xl:px-2 2xl:text-[15px] ${
+                    aria-current={
+                      active ? "page" : undefined
+                    }
+                    className={`group relative isolate shrink-0 overflow-hidden whitespace-nowrap rounded-xl px-2.5 py-3 text-[14px] font-semibold tracking-[-0.015em] transition-all duration-300 2xl:px-3 2xl:text-[16px] ${
                       active
-                        ? "text-[#EF4444]"
-                        : "text-[#29322D] hover:text-[#EF4444]"
+                        ? "text-[#17392E]"
+                        : "text-[#36443C] hover:-translate-y-[2px] hover:text-[#17392E]"
                     }`}
                   >
-                    {itemLabel(item)}
+                    {/* Active glass pill */}
+                    {active && (
+                      <motion.span
+                        layoutId="active-nav-glass"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 32,
+                        }}
+                        className="absolute inset-0 rounded-xl border border-[#BFD8C5] bg-gradient-to-b from-[#F4FBF5] to-[#E7F2EA] shadow-[0_3px_12px_rgba(23,57,46,0.08)]"
+                      />
+                    )}
 
-                    {/* ACTIVE UNDERLINE */}
-                    <span
-                      className={`absolute bottom-[20px] left-1 right-1 h-[2.5px] origin-left rounded-full bg-[#EF4444] transition-transform duration-300 ${
-                        active
-                          ? "scale-x-100"
-                          : "scale-x-0 group-hover:scale-x-100"
-                      }`}
-                    />
+                    {/* Hover background */}
+                    {!active && (
+                      <span className="absolute inset-0 rounded-xl border border-transparent bg-[#EAF3EC]/0 transition-all duration-300 group-hover:border-[#D2E5D6] group-hover:bg-[#EAF3EC]/85 group-hover:shadow-[0_4px_14px_rgba(23,57,46,0.06)]" />
+                    )}
+
+                    {/* Label */}
+                    <span className="relative z-10">
+                      {itemLabel(item)}
+                    </span>
+
+                    {/* Active indicator */}
+                    {active && (
+                      <span className="absolute bottom-[5px] left-1/2 z-10 h-[3px] w-5 -translate-x-1/2 rounded-full bg-[#EF6250]" />
+                    )}
+
+                    {/* Hover underline */}
+                    {!active && (
+                      <span className="absolute bottom-[5px] left-1/2 z-10 h-[2px] w-0 -translate-x-1/2 rounded-full bg-[#D66A53] transition-all duration-300 group-hover:w-5" />
+                    )}
                   </NavLink>
                 );
               })}
@@ -381,25 +457,17 @@ export default function Navbar() {
 
             <div className="flex shrink-0 items-center gap-3">
 
-              {/* WHATSAPP ENQUIRY */}
-              <a
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group hidden h-[46px] items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[#EF4444] px-5 text-[13px] font-extrabold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#DC2626] hover:shadow-[0_8px_20px_rgba(239,68,68,0.22)] sm:flex 2xl:h-[48px] 2xl:px-6 2xl:text-[14px]"
-              >
-                {label(
-                  "Enquire Now",
-                  "चौकशी करा"
-                )}
-
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              <div className="hidden sm:block">
+                <DonateButton
+                  label={label(
+                    "Donate Now",
+                    "देणगी द्या"
+                  )}
+                  active={isLinkActive("/donate")}
                 />
-              </a>
+              </div>
 
-              {/* MOBILE MENU BUTTON */}
+              {/* MOBILE MENU */}
               <button
                 ref={menuButtonRef}
                 type="button"
@@ -410,7 +478,7 @@ export default function Navbar() {
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-navigation"
                 onClick={() => setMobileOpen(true)}
-                className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EF4444] text-white transition-colors hover:bg-[#DC2626] xl:hidden"
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#DCE9DF] bg-[#F0F7F2] text-[#17392E] transition-all duration-300 hover:border-[#C2DDC9] hover:bg-[#E0EFE4] min-[1450px]:hidden"
               >
                 <Menu size={24} />
               </button>
@@ -420,23 +488,23 @@ export default function Navbar() {
       </header>
 
       {/* ======================================
-          MOBILE / TABLET NAVIGATION
+          MOBILE / TABLET DRAWER
       ====================================== */}
 
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* OVERLAY */}
+            {/* BACKDROP */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={closeMenu}
-              className="fixed inset-0 z-[60] bg-[#07160F]/65 backdrop-blur-[3px] xl:hidden"
+              className="fixed inset-0 z-[60] bg-[#07180F]/65 backdrop-blur-[5px] min-[1450px]:hidden"
             />
 
-            {/* MOBILE DRAWER */}
+            {/* DRAWER */}
             <motion.aside
               id="mobile-navigation"
               ref={mobileRef}
@@ -447,18 +515,22 @@ export default function Navbar() {
                 "मोबाईल नेव्हिगेशन"
               )}
               tabIndex={-1}
-              initial={{ x: "100%" }}
+              initial={
+                reduceMotion
+                  ? false
+                  : { x: "100%" }
+              }
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{
                 type: "spring",
-                stiffness: 280,
-                damping: 30,
+                stiffness: 290,
+                damping: 31,
               }}
-              className="fixed inset-y-0 right-0 z-[70] flex w-[min(90vw,410px)] flex-col bg-white shadow-2xl xl:hidden"
+              className="fixed inset-y-0 right-0 z-[70] flex w-[min(90vw,410px)] flex-col border-l border-[#DCE8DE] bg-[#FBFDFC] shadow-2xl min-[1450px]:hidden"
             >
               {/* DRAWER HEADER */}
-              <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-5">
+              <div className="flex shrink-0 items-center justify-between border-b border-[#E7EEE8] bg-white px-6 py-5">
 
                 <div className="flex items-center gap-3">
                   <img
@@ -468,14 +540,14 @@ export default function Navbar() {
                   />
 
                   <div className="leading-tight">
-                    <p className="text-[16px] font-black text-[#202725]">
+                    <p className="text-[16px] font-semibold text-[#202725]">
                       {label(
                         "MORYA SAMAJIK",
                         "मोरया सामाजिक"
                       )}
                     </p>
 
-                    <p className="text-[14px] font-extrabold tracking-wider text-[#006B2E]">
+                    <p className="text-[13px] font-medium tracking-[0.07em] text-[#006B2E]">
                       {label(
                         "PRATISHTHAN",
                         "प्रतिष्ठान"
@@ -491,19 +563,19 @@ export default function Navbar() {
                     "Close menu",
                     "मेनू बंद करा"
                   )}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F4F5F4] text-[#202725] transition-colors hover:bg-red-50 hover:text-[#EF4444]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E0EAE2] bg-[#F1F6F2] text-[#17392E] transition-colors hover:bg-[#E3EEE6]"
                 >
                   <X size={22} />
                 </button>
               </div>
 
               {/* ==================================
-                  MOBILE NAVIGATION LINKS
+                  MOBILE NAVIGATION
               ================================== */}
 
-              <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+              <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
 
-                <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400">
+                <p className="mb-4 px-2 text-[11px] font-medium uppercase tracking-[0.14em] text-[#85958A]">
                   {label(
                     "Explore Our Website",
                     "वेबसाइटवरील पेजेस"
@@ -512,41 +584,60 @@ export default function Navbar() {
 
                 <nav className="space-y-2">
                   {navItems.map((item, index) => {
-                    const active = isLinkActive(item.path);
+                    const active =
+                      isLinkActive(item.path);
 
                     return (
                       <motion.div
                         key={item.path}
-                        initial={{
-                          opacity: 0,
-                          x: 16,
-                        }}
+                        initial={
+                          reduceMotion
+                            ? false
+                            : {
+                                opacity: 0,
+                                x: 14,
+                              }
+                        }
                         animate={{
                           opacity: 1,
                           x: 0,
                         }}
                         transition={{
                           duration: 0.3,
-                          delay: 0.04 + index * 0.035,
+                          delay: reduceMotion
+                            ? 0
+                            : 0.03 + index * 0.025,
                         }}
                       >
                         <NavLink
                           to={item.path}
                           onClick={closeMenu}
-                          className={`group flex items-center justify-between rounded-xl px-4 py-4 text-[16px] font-bold transition-all duration-200 ${
+                          aria-current={
                             active
-                              ? "bg-[#FFF1F1] text-[#EF4444]"
-                              : "text-[#29322D] hover:bg-[#F6F7F6] hover:text-[#EF4444]"
+                              ? "page"
+                              : undefined
+                          }
+                          className={`group relative flex items-center justify-between overflow-hidden rounded-xl border px-4 py-3.5 text-[16px] font-semibold transition-all duration-300 ${
+                            active
+                              ? "border-[#BED8C5] bg-gradient-to-r from-[#EAF5ED] to-white text-[#17392E] shadow-[0_5px_15px_rgba(23,57,46,0.07)]"
+                              : "border-transparent text-[#37483E] hover:border-[#D6E7D9] hover:bg-[#F0F7F2]"
                           }`}
                         >
-                          <span>{itemLabel(item)}</span>
+                          {/* Active left accent */}
+                          {active && (
+                            <span className="absolute bottom-2 left-0 top-2 w-[3px] rounded-r-full bg-[#EF6250]" />
+                          )}
+
+                          <span>
+                            {itemLabel(item)}
+                          </span>
 
                           <ArrowUpRight
                             size={18}
-                            className={`transition-all ${
+                            className={`transition-all duration-300 ${
                               active
-                                ? "opacity-100"
-                                : "opacity-35 group-hover:opacity-100"
+                                ? "text-[#D76550]"
+                                : "text-[#9BAAA0] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D76550]"
                             }`}
                           />
                         </NavLink>
@@ -555,44 +646,43 @@ export default function Navbar() {
                   })}
                 </nav>
 
-                {/* WHATSAPP ENQUIRY */}
-                <a
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMenu}
-                  className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-[#EF4444] px-5 py-4 text-[15px] font-extrabold text-white transition-colors hover:bg-[#DC2626]"
-                >
-                  {label(
-                    "Apply / Enquire Now",
-                    "प्रवेशासाठी चौकशी करा"
-                  )}
+                {/* DONATE */}
+                <div className="mt-6">
+                  <DonateButton
+                    label={label(
+                      "Donate Now",
+                      "देणगी द्या"
+                    )}
+                    mobile
+                    active={isLinkActive("/donate")}
+                    onClick={closeMenu}
+                  />
+                </div>
 
-                  <ArrowRight size={19} />
-                </a>
-
-                {/* PHONE */}
+                {/* CONTACT */}
                 <a
                   href={`tel:${CONTACT.phone.replace(
                     /[^+\d]/g,
                     ""
                   )}`}
-                  className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-[#EFF7F1] px-5 py-3.5 text-[15px] font-bold text-[#006B2E]"
+                  className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-[#DDEAE0] bg-white px-5 py-3.5 text-[15px] font-medium text-[#17392E] transition-colors hover:bg-[#F1F7F2]"
                 >
-                  <Phone size={18} />
+                  <Phone size={17} />
                   {CONTACT.phone}
                 </a>
 
-                {/* EMAIL */}
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="mt-5 flex items-center justify-center gap-2 break-all text-center text-[13px] text-gray-500"
+                  className="mt-5 flex items-center justify-center gap-2 break-all text-center text-[13px] text-[#738478] transition-colors hover:text-[#17392E]"
                 >
-                  <Mail size={16} className="shrink-0" />
+                  <Mail
+                    size={16}
+                    className="shrink-0"
+                  />
+
                   {CONTACT.email}
                 </a>
 
-                {/* SOCIAL ICONS */}
                 <div className="mt-6 flex justify-center pb-6">
                   <SocialIcons />
                 </div>

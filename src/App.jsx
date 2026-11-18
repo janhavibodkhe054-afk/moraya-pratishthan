@@ -19,6 +19,8 @@ import Success from "./pages/Success";
 import Gallery from "./pages/Gallery";
 // import Enquiry from "./pages/Enquiry";
 import Contact from "./pages/Contact";
+import Donate from "./pages/Donate";
+import Courses from "./pages/Courses";
 
 // Individual College Pages
 // import LaxmanJagtap from "./pages/colleges/LaxmanJagtap";
@@ -47,6 +49,8 @@ function App() {
         />
         <Route path="/csr" element={<CSR />} />
         <Route path="/un-exposure" element={<UnExposure />} />
+        <Route path="/donate" element={<Donate />} />
+        <Route path="/courses" element={<Courses />} />
         {/*
         
         

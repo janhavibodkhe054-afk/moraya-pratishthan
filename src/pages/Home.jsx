@@ -8,11 +8,13 @@ import CSRPartnershipsSection from '../components/home/CSRPartnershipsSection'
 import InternationalExposureSection from '../components/home/InternationalExposureSection'
 import FinalCTASection from '../components/home/FinalCTASection'
 import ClinicalExposureSection from '../components/home/ClinicalExposureSection'
+import InstitutionalQuoteSection from '../components/home/InstitutionalQuoteSection'
 
 const Home = () => {
   return (
     <div>
       <HeroSection/>
+      <InstitutionalQuoteSection/>
       <AboutSection/>
       <FocusAreasSection/>
       <EducationalInstitutions/>
