@@ -18,14 +18,7 @@ import { useLanguage } from "../../context/Languagecontext";
 const WHATSAPP_NUMBER = "919422036639";
 
 const COURSES = [
-  {
-    code: "BMLT",
-    title: "Bachelor of Medical Laboratory Technology",
-    description: "Comprehensive training in clinical pathology, biochemistry, microbiology, and hematology with hands-on lab practice.",
-    duration: "3 Years + 6 Months Internship",
-    eligibility: "12th Science (Min 45%)",
-    category: "Laboratory",
-  },
+  
   {
     code: "DMLT",
     title: "Diploma in Medical Laboratory Technology",
@@ -34,14 +27,7 @@ const COURSES = [
     eligibility: "10th & 12th Pass",
     category: "Laboratory",
   },
-  {
-    code: "PG_DMLT",
-    title: "P.G. Advance Medical Laboratory Technology",
-    description: "Advanced postgraduate program for specialised diagnostic and research expertise.",
-    duration: "1 Year + 6 Months Internship",
-    eligibility: "B.Sc. (Micro / Chem) Pass",
-    category: "Laboratory",
-  },
+  
   {
     code: "MLT",
     title: "Medical Laboratory Technician",
@@ -98,14 +84,7 @@ const COURSES = [
     eligibility: "12th Pass",
     category: "Specialised Healthcare",
   },
-  {
-    code: "CATH_LAB",
-    title: "Diploma in Cath Lab Technician",
-    description: "Specialised training in cardiac catheterization lab procedures and patient care.",
-    duration: "1 Year + 3 Months Internship",
-    eligibility: "12th Pass",
-    category: "Specialised Healthcare",
-  },
+  
   {
     code: "SI_TECH",
     title: "Sanitary / Health Inspector Technician",
